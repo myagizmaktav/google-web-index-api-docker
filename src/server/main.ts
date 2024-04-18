@@ -96,7 +96,7 @@ const start = async () => {
   const finishedDate = new Date();
   console.log(
     `Indexing process finished at ${finishedDate.toISOString()} and indexed ${
-      sitemapLinksArray.length
+      200 - limitIndex + 1
     } links.`
   );
 
