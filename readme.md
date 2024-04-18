@@ -37,7 +37,7 @@ Docker Compose Example:
 version: "3"
 services:
   node:
-    container_name: foxsnow/web-indexing-api-google:latest 
+    image: foxsnow/web-indexing-api-google:latest 
     build: 
       context: ./
     environment:
