@@ -92,6 +92,18 @@ const start = async () => {
       index = 0;
     }
   }
+
+  const finishedDate = new Date();
+  console.log(
+    `Indexing process finished at ${finishedDate.toISOString()} and indexed ${
+      sitemapLinksArray.length
+    } links.`
+  );
+
+  finishedDate.setHours(finishedDate.getHours() + 26);
+  console.log(
+    `Next indexing process will start at ${finishedDate.toISOString()}`
+  );
 };
 start();
 
