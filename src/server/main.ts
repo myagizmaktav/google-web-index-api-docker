@@ -80,7 +80,7 @@ const start = async () => {
           privateKey: privateKey,
           clientEmail: clientEmail,
         });
-        timeout(1000 * 60); // 1 min
+        timeout(1000 * 15); // 15 min
 
         sitemapLinksArray.splice(index, 1);
 
