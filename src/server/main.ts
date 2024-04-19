@@ -21,8 +21,8 @@ const getRandomIndex = ({
 
   return randomIndexNumber;
 };
-const timeout = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const timeout = (sn: number) =>
+  new Promise((resolve) => setTimeout(resolve, sn*1000)); // 1 second
 
 const start = async () => {
   dotenv.config();
@@ -80,7 +80,7 @@ const start = async () => {
           privateKey: privateKey,
           clientEmail: clientEmail,
         });
-        timeout(1000 * 15); // 15 min
+        timeout(15); // 15 seconds
 
         sitemapLinksArray.splice(index, 1);
 
@@ -105,8 +105,10 @@ const start = async () => {
     `Next indexing process will start at ${finishedDate.toISOString()}`
   );
 };
+// First Start
 start();
 
+// 25 hours interval
 setInterval(() => {
   start();
-}, 1000 * 60 * 60 * 24 + 1000 * 60 * 60 * 1); // 25 hours
+}, 1000 * 60 * 60 * 25); // 25 hours

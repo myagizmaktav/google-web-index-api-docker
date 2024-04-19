@@ -1,9 +1,7 @@
 {
   "name": "google-web-index-api",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
-
     "start": "tsx src/server/main.ts",
     "test": "tsx src/server/test.ts",
     "docker-build-and-push-latest": "docker build -t foxsnow/web-indexing-api-google:latest ./ --no-cache  && sleep 5 && sudo docker push foxsnow/web-indexing-api-google:latest"
@@ -13,17 +11,13 @@
     "@types/node": "^20.9.3",
     "@types/request": "^2.48.12",
     "nodemon": "^3.0.1"
-
   },
   "dependencies": {
     "@myagizmaktav/sitemapper": "^3.2.8",
     "dotenv": "^16.4.5",
-
     "google-auth-library": "^9.8.0",
     "googleapis": "^134.0.0",
-
     "tsx": "^4.5.0",
     "typescript": "^5.3.2"
-
   }
 }
