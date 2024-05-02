@@ -2,6 +2,8 @@
 
 ### Warning: This automation is recommended for sites with 5000+ sitemap links. Long-term use of the indexing API may be harmful, as Google bots may interpret manual indexing as unnecessary, potentially reducing the frequency of reindexing. Typically, Google Search Console indexes around 100 pages daily.
 
+### Tip: if your Google console not giving no index tag error. do not fix other errors until your site sitemap is fully indexed or successful or not successful.
+
 ### Info: The daily limit for reindexing is 200 pages according to Google's restrictions.
 
 #### Description: 
