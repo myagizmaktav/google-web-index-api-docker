@@ -120,8 +120,18 @@ printf '%s' "$(jq -r .private_key service-account.json)" | base64 -w0
 )
 ```
 
+No terminal handy? Open your browser's developer console and use `btoa`, pasting the `private_key` value between the backticks:
+
+```js
+btoa(`-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASC...
+-----END PRIVATE KEY-----`)
+```
+
 > [!TIP]
-> `-w0` keeps the output on a **single line**. Wrapped values are handled, but some deployment panels (Coolify, Portainer, Dokploy) truncate multi-line secrets.
+> With `btoa`, use a **template literal** (backticks), not `"quotes"` — a quoted string cannot span lines and the key is multi-line. Copying the value straight out of the JSON file gives you one line containing literal `\n` sequences; that form works too and is decoded correctly.
+>
+> With the shell command, `-w0` keeps the output on a **single line**. Wrapped values are handled, but some deployment panels (Coolify, Portainer, Dokploy) truncate multi-line secrets.
 
 ### Step 5 — Configure and run
 
