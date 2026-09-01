@@ -1,43 +1,58 @@
-import { google } from "googleapis";
+import type { GoogleClients } from "./google-client.js";
 
+/**
+ * Coverage states that mean the URL is in Google's index.
+ *
+ * Matching is exact (case-insensitively) rather than substring based: several
+ * negative states contain an indexed state as a substring, so
+ * "Submitted, not indexed" and "Crawled - currently not indexed" would both
+ * pass a naive `includes()` check and cause the URL to be skipped.
+ */
+const INDEXED_COVERAGE_STATES = new Set([
+  "submitted and indexed",
+  "indexed, not submitted in sitemap",
+  "indexed",
+]);
+
+export interface IsIndexedOptions {
+  link: string;
+  siteUrl: string;
+  clients: GoogleClients;
+}
+
+/**
+ * Asks the URL Inspection API whether a link is already indexed.
+ *
+ * On an API error this returns `false` so the caller falls through to
+ * submitting the URL. Re-submitting an already indexed page is harmless;
+ * skipping an unindexed one is not.
+ */
 export async function isIndexed({
   link,
-  privateKey,
-  clientEmail,
-}: {
-  link: string;
-  privateKey: string;
-  clientEmail: string;
-}) {
-  const searchconsole = google.searchconsole("v1");
+  siteUrl,
+  clients,
+}: IsIndexedOptions): Promise<boolean> {
+  try {
+    const response = await clients.searchConsole.urlInspection.index.inspect({
+      requestBody: {
+        inspectionUrl: link,
+        languageCode: "en-US",
+        siteUrl,
+      },
+    });
 
-  const client = new google.auth.JWT(
-    clientEmail,
-    undefined,
-    privateKey,
-    [
-      "https://www.googleapis.com/auth/webmasters",
-      "https://www.googleapis.com/auth/webmasters.readonly",
-    ],
-    undefined
-  );
+    const coverageState =
+      response.data.inspectionResult?.indexStatusResult?.coverageState;
 
-  google.options({ auth: client });
-  const url = new URL(link);
-  const match = url.hostname.match(/(?<domain>[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/);
-  const domain = match?.groups?.domain as any;
+    if (!coverageState) return false;
 
-  const isIndexed = await searchconsole.urlInspection.index.inspect({
-    requestBody: {
-      inspectionUrl: link,
-      languageCode: "en-US",
-      siteUrl: `sc-domain:${domain}`,
-    },
-  });
-
-  console.log(isIndexed.data);
-
-  return isIndexed?.data.inspectionResult?.indexStatusResult?.coverageState?.includes(
-    "Submitted"
-  );
+    return INDEXED_COVERAGE_STATES.has(coverageState.trim().toLowerCase());
+  } catch (error) {
+    console.warn(
+      `Could not inspect ${link}: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+    return false;
+  }
 }
