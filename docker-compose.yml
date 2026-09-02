@@ -1,0 +1,15 @@
+services:
+  google-web-index-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: google-web-index-api
+    restart: unless-stopped
+    # Values live in .env (git-ignored). Start from .env.example.
+    env_file:
+      - .env
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
