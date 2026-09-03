@@ -205,8 +205,23 @@ SITEMAP_LINK=https://example.com/sitemap.xml|https://example.com/shop/,https://o
 | `npm test` | Unit tests |
 | `npm run typecheck` | Type check, including tests |
 | `npm run build` | Compiles to `dist/` |
-| `npm run docker:build` | Builds the Docker image |
-| `npm run docker:push` | Pushes it |
+| `npm run docker:build` | Builds the Docker image, tagged with the `package.json` version and `latest` |
+| `npm run docker:push` | Pushes both tags |
+
+### Releasing
+
+Pushing a `v*` tag builds the image for `linux/amd64` and `linux/arm64` and
+publishes it to Docker Hub as `foxsnow/web-indexing-api-google`:
+
+```bash
+npm version 1.0.1 --no-git-tag-version   # bump package.json
+git commit -am "release: 1.0.1"
+git tag v1.0.1 && git push origin main --tags
+```
+
+The same workflow can be run manually from the Actions tab with the version
+passed as an input. It needs the `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`
+repository secrets.
 
 ---
 

@@ -2,6 +2,7 @@
   "name": "google-web-index-api",
   "version": "1.0.0",
   "private": true,
+  "license": "GPL-3.0",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -12,10 +13,10 @@
     "dev": "tsx watch src/server/main.ts",
     "test": "tsx --test src/server/__tests__/*.test.ts",
     "typecheck": "tsc --project tsconfig.test.json",
-    "docker:build": "docker build -t foxsnow/web-indexing-api-google:latest ./",
-    "docker:push": "docker push foxsnow/web-indexing-api-google:latest",
+    "docker:build": "docker build --build-arg VERSION=$npm_package_version -t foxsnow/web-indexing-api-google:$npm_package_version -t foxsnow/web-indexing-api-google:latest ./",
+    "docker:push": "docker push foxsnow/web-indexing-api-google:$npm_package_version && docker push foxsnow/web-indexing-api-google:latest",
     "docker:build-and-push": "npm run docker:build && npm run docker:push",
-    "docker-build-and-push-latest": "docker build -t foxsnow/web-indexing-api-google:latest ./ --no-cache && docker push foxsnow/web-indexing-api-google:latest",
+    "docker-build-and-push-latest": "docker build --no-cache --build-arg VERSION=$npm_package_version -t foxsnow/web-indexing-api-google:$npm_package_version -t foxsnow/web-indexing-api-google:latest ./ && npm run docker:push",
     "check-access": "tsx src/server/check-access.ts"
   },
   "devDependencies": {
